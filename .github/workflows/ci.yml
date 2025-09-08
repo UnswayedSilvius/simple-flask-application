@@ -1,0 +1,43 @@
+name: Build and Test Docker Container
+
+on:
+  push:
+    branches: [ main ]
+  pull_request:
+    branches: [ main ]
+  workflow_dispatch:  
+
+jobs:
+  build-and-test:
+    runs-on: ubuntu-latest
+
+    steps:
+      - name: Checkout repository
+        uses: actions/checkout@v4
+
+      - name: Build Docker image
+        run: docker build -t simple-flask-app .
+
+      - name: Run Docker container
+        run: docker run -d -p 5000:5000 --name flask-app simple-flask-app
+
+      - name: Wait for app to start
+        run: sleep 5
+
+      - name: Test application
+        run: |
+          max_retries=10
+          retry_count=0
+          until curl --fail http://localhost:5000 | grep "Hello from DevOps pipeline!" || [ $retry_count -eq $max_retries ]
+          do
+            echo "Attempt $((retry_count+1)): App not ready, waiting..."
+            sleep 2
+            retry_count=$((retry_count+1))
+          done
+          if [ $retry_count -eq $max_retries ]
+          then
+            echo "Test failed after $max_retries attempts."
+            exit 1
+          else
+            echo "Test successful! Found 'Hello from DevOps pipeline!'."
+          fi
