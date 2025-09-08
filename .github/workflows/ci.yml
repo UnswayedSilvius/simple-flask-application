@@ -18,8 +18,11 @@ jobs:
       - name: Build Docker image
         run: docker build -t simple-flask-app .
 
+      - name: Create Docker network
+        run: docker network create flask-network
+
       - name: Run Docker container
-        run: docker run -d -p 5000:5000 --name flask-app simple-flask-app
+        run: docker run -d --network flask-network -p 5000:5000 --name flask-app simple-flask-app
 
       - name: Wait for app to start
         run: sleep 5
@@ -28,7 +31,7 @@ jobs:
         run: |
           max_retries=10
           retry_count=0
-          until curl --fail http://localhost:5000 | grep "Hello from DevOps pipeline!" || [ $retry_count -eq $max_retries ]
+          until curl --fail http://flask-app:5000 | grep "Hello from DevOps pipeline!" || [ $retry_count -eq $max_retries ]
           do
             echo "Attempt $((retry_count+1)): App not ready, waiting..."
             sleep 2
