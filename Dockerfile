@@ -23,6 +23,8 @@ COPY . .
 # It's a way of documenting which port the container uses.
 EXPOSE 5000
 
+ENV FLASK_APP=simple-flask-application.py
+
 # Run the Flask application.
 # The CMD instruction specifies the command that will be executed when
 # the container starts. The --host=0.0.0.0 makes the app accessible from
