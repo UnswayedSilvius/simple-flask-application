@@ -5,11 +5,17 @@ on:
     branches: [ master ]
   pull_request:
     branches: [ master ]
-  workflow_dispatch:  
+  workflow_dispatch:
 
 jobs:
   build-and-test:
     runs-on: ubuntu-latest
+
+    services:
+      flask-app:
+        image: simple-flask-app:latest
+        ports:
+          - 5000:5000
 
     steps:
       - name: Checkout repository
@@ -17,15 +23,6 @@ jobs:
 
       - name: Build Docker image
         run: docker build -t simple-flask-app .
-
-      - name: Create Docker network
-        run: docker network create flask-network
-
-      - name: Run Docker container
-        run: docker run -d --network flask-network -p 5000:5000 --name flask-app simple-flask-app
-
-      - name: Wait for app to start
-        run: sleep 5
 
       - name: Test application
         run: |
