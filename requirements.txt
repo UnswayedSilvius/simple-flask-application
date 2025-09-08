@@ -1,0 +1,4 @@
+# This file lists all the Python libraries your application needs to run.
+# The Dockerfile will read this file and install the dependencies.
+# We are specifying a version (3.0.3) for reproducibility, which is a best practice.
+Flask==3.0.3
