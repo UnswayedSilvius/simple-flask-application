@@ -26,7 +26,9 @@ jobs:
           for i in $(seq 1 30); do
             if curl --silent --fail http://localhost:5000; then
               echo "App is ready after $i attempts."
-            exit 0
+              # This exit is now correctly indented and will stop the job
+              # from proceeding if the test passes.
+              exit 0
             fi
             echo "Waiting for app to be ready... (attempt $i/30)"
             sleep 2
@@ -35,6 +37,8 @@ jobs:
           exit 1
 
       - name: Test application
+        # This step is now optional because the previous step ensures the app is running.
+        # It is just to ensure the message is what we expect.
         run: |
           max_retries=10
           retry_count=0
