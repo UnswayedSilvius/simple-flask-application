@@ -21,8 +21,18 @@ jobs:
       - name: Run Docker container
         run: docker run -d -p 5000:5000 --name flask-app simple-flask-app
 
-      - name: Wait for app to start
-        run: sleep 5
+      - name: Wait for app to be ready
+        run: |
+          for i in $(seq 1 30); do
+            if curl --silent --fail http://localhost:5000; then
+              echo "App is ready after $i attempts."
+            exit 0
+            fi
+            echo "Waiting for app to be ready... (attempt $i/30)"
+            sleep 2
+          done
+          echo "App failed to start within 60 seconds."
+          exit 1
 
       - name: Test application
         run: |
