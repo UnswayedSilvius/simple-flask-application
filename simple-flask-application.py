@@ -9,7 +9,7 @@ app = Flask(__name__)
 def hello():
     # Return a specific string. This is the message our pipeline
     # will test for to confirm the application is running correctly.
-    return 'Hello from DevOps pipeline!'
+    return 'Hello from Sukuna!'
 
 # This block ensures the application runs only when the script is executed directly.
 if __name__ == '__main__':
