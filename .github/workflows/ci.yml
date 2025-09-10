@@ -42,7 +42,7 @@ jobs:
         run: |
           max_retries=10
           retry_count=0
-          until curl --fail http://localhost:5000 | grep "Hello from DevOps pipeline!" || [ $retry_count -eq $max_retries ]
+          until curl --fail http://localhost:5000 | grep "Hello from Sukuna!" || [ $retry_count -eq $max_retries ]
           do
             echo "Attempt $((retry_count+1)): App not ready, waiting..."
             sleep 2
@@ -53,5 +53,5 @@ jobs:
             echo "Test failed after $max_retries attempts."
             exit 1
           else
-            echo "Test successful! Found 'Hello from DevOps pipeline!'."
+            echo "Test successful! Found 'Hello from Sukuna!'."
           fi
